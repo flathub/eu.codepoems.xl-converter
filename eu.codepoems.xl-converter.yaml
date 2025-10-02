@@ -324,7 +324,7 @@ modules:
         commit: 37cf556d1ffdba241a6112eba09f5f9dbc81cccd
       - type: script
         commands:
-          - python3 /app/xl-converter/main.py
+          - python3 /app/xl-converter/main.py "$@"
         dest-filename: run.sh
       - type: script
         commands:
