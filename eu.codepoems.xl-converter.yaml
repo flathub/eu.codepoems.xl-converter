@@ -38,6 +38,7 @@ cleanup-commands:
   - rm -rfv /app/lib/python*/site-packages/PySide6/Qt3DCore*
   - rm -rfv /app/lib/libexec/webenginedriver
   - rm -rfv /app/lib/libexec/QtWebEngineProcess
+  - rm -rfv /app/xl-converter/test*
 finish-args:
   - --share=ipc
   - --socket=wayland
@@ -149,8 +150,8 @@ modules:
       - type: git
         url: https://aomedia.googlesource.com/aom.git
         dest: ext/aom
-        tag: v3.12.1
-        commit: 10aece4157eb79315da205f39e19bf6ab3ee30d0
+        tag: v3.13.1
+        commit: d772e334cc724105040382a977ebb10dfd393293
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -201,8 +202,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ImageMagick/ImageMagick.git
-        tag: 7.1.1-47
-        commit: 82572afc879b439cbf8c9c6f3a9ac7626adf98fb
+        tag: 7.1.2-3
+        commit: 147bc9c12ce8fbc1e94af5b5f6f0643ca410103a
         x-checker-data:
           type: git
           tag-pattern: ^([\d.]+-\d+)$
@@ -217,8 +218,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/exiftool/exiftool.git
-        tag: '13.30'
-        commit: 1ed3f81e6634198fe637df4d42bd90c594ea5283
+        tag: '13.37'
+        commit: 2b14d194b18c61e9ecb9e01093eeac889cb169de
         x-checker-data:
           type: git
           tag-pattern: ^(\d+.\d+)$
@@ -250,7 +251,7 @@ modules:
             build-commands:
               - ./Configure -des -Duseshrplib -Dman3dir=none -Dman1dir=none -Dprefix=/app
               - make
-              - make install
+              - make install-strip
             cleanup:
               - /bin/corelist
               - /bin/cpan
@@ -286,12 +287,15 @@ modules:
             build-options:
               cflags: -fPIC
               ldflags: -fpic
+              # `strip: true` (the default) conflicts with rofiles. This workaround uses `make install-strip` with `strip: false`.
+              # Alternatively, pass `--disable-rofiles-fuse` to flatpak-builder.
+              strip: false
             post-install:
               - 'chmod -R u+w /app/lib/perl5'
             sources:
               - type: archive
-                url: https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz
-                sha256: 0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b
+                url: https://www.cpan.org/src/5.0/perl-5.42.0.tar.xz
+                sha256: 73cf6cc1ea2b2b1c110a18c14bbbc73a362073003893ffcedc26d22ebdbdd0c3
                 x-checker-data:
                   type: anitya
                   project-id: 13599
@@ -320,10 +324,10 @@ modules:
       - type: git
         url: https://github.com/JacobDev1/xl-converter.git
         dest: xl-converter
-        commit: 37cf556d1ffdba241a6112eba09f5f9dbc81cccd
+        commit: 6fcad3a2c39603516e7e49a29230a7f9330f64f5
       - type: script
         commands:
-          - python3 /app/xl-converter/main.py
+          - python3 /app/xl-converter/main.py "$@"
         dest-filename: run.sh
       - type: script
         commands:
