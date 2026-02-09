@@ -1,11 +1,11 @@
 id: eu.codepoems.xl-converter
 runtime: org.kde.Platform
-runtime-version: '6.8'
+runtime-version: '6.10'
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
 base: io.qt.PySide.BaseApp
-base-version: '6.8'
+base-version: '6.10'
 command: run.sh
 build-options:
   env:
@@ -60,6 +60,7 @@ modules:
       - -DJPEGXL_ENABLE_PLUGINS=OFF
       - -DJPEGXL_ENABLE_OPENEXR=OFF
       - -DJPEGXL_ENABLE_DEVTOOLS=OFF
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     post-install:
       - mkdir -p /app/xl-converter/bin/linux
       - cd /app/bin && mv cjxl djxl jxlinfo cjpegli /app/xl-converter/bin/linux/
@@ -324,7 +325,7 @@ modules:
       - type: git
         url: https://github.com/JacobDev1/xl-converter.git
         dest: xl-converter
-        commit: 6fcad3a2c39603516e7e49a29230a7f9330f64f5
+        commit: 4b728719c9b952c890f895337768af3df2c86a8d
       - type: script
         commands:
           - python3 /app/xl-converter/main.py "$@"
